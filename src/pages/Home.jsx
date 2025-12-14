@@ -2,7 +2,15 @@ import { useState } from "react"
 import MovieCard from "../components/MovieCard"
 
 const Home = ({ movies }) => {
-    let index = 0
+    const [index, setIndex] = useState(0)
+
+    const prev = () => {
+        setIndex((prev) => (prev - 1))
+    }
+
+    const next = () => {
+        setIndex((prev) => (prev + 1))
+    }
 
     const movie = movies[index]
 
@@ -10,7 +18,7 @@ const Home = ({ movies }) => {
         <main className="relative flex items-center justify-center min-h-[70vh] bg-gray-100 dark:bg-gray-800">
             {index > 0 && (
                 <button
-                    onClick=""
+                    onClick={prev}
                     className="absolute left-4 z-10 text-3xl"
                 >
                     ◀
@@ -21,7 +29,7 @@ const Home = ({ movies }) => {
 
             {index < 4 && (
                 <button
-                    onClick=""
+                    onClick={next}
                     className="absolute right-4 z-10 text-3xl"
                 >
                     ▶
