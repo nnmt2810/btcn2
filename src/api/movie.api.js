@@ -1,17 +1,20 @@
-const BASE_URL = "https://34.124.214.214:2423"
-
 export const getMovies = async () => {
-  const res = await fetch(`${BASE_URL}/Movies/get_movies`, {
-    method: "GET",
+  const token = import.meta.env.VITE_APP_TOKEN
+  
+  const res = await fetch("/api/movies", {
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_APP_TOKEN}`,
+      "x-app-token": token,
     },
   })
 
+  const text = await res.text()
+
+  console.log("Status:", res.status)
+  console.log("Response:", text)
+
   if (!res.ok) {
-    throw new Error(`HTTP error! status: ${res.status}`)
+    throw new Error("Fetch movies failed")
   }
 
-  return res.json()
+  return JSON.parse(text)
 }
