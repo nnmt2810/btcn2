@@ -4,11 +4,15 @@ import './App.css'
 import Navbar from './components/Navbar'
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false)
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem('darkMode')
+    return saved ? JSON.parse(saved) : false
+  })
 
   useEffect(() => {
     const root = document.documentElement
     root.classList.toggle("dark", darkMode)
+    localStorage.setItem('darkMode', JSON.stringify(darkMode))
   }, [darkMode])
 
   return (

@@ -1,4 +1,4 @@
-const Header = () => {
+const Header = ({ darkMode, setDarkMode }) => {
   return (
     <header className="bg-red-100">
       <div className="mx-auto flex max-w-[1200px] h-16 items-center justify-between px-4 py-2 text-red-800">
@@ -8,8 +8,12 @@ const Header = () => {
             Movies info
           </h1>
 
-          <button className="text-lg">
-            ⚙️
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="p-2"
+            aria-label="Toggle dark mode"
+          >
+            {darkMode ? "☀️" : "🌙"}
           </button>
       </div>
     </header>  
