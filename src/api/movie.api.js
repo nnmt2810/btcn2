@@ -1,7 +1,7 @@
 export const getMovies = async () => {
   const token = import.meta.env.VITE_APP_TOKEN
   
-  const res = await fetch("/api/movies", {
+  const res = await fetch("/api/movies/most-popular", {
     headers: {
       "x-app-token": token,
     },
