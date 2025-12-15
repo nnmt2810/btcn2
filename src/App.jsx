@@ -4,6 +4,7 @@ import './App.css'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import { getMovies } from './api/movie.api'
+import { getMoviesTopRated } from './api/movie.top-rated.api'
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -12,6 +13,7 @@ function App() {
   })
 
   const [movies, setMovies] = useState([])
+  const [topRatedMovies, setTopRatedMovies] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -22,18 +24,24 @@ function App() {
   }, [darkMode])
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const data = await getMovies()
-        setMovies(data.data ?? data)
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
+  const fetchData = async () => {
+    try {
+      const [moviesRes, topRatedRes] = await Promise.all([
+        getMovies(),
+        getMoviesTopRated(),
+      ])
+
+      setMovies(moviesRes.data ?? moviesRes)
+      setTopRatedMovies(topRatedRes.data ?? topRatedRes)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
     }
-    fetchMovies()
-  }, [])
+  }
+
+  fetchData()
+}, [])
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error: {error}</p>
@@ -45,7 +53,10 @@ function App() {
         setDarkMode={setDarkMode}
       />
       <Navbar />
-      <Home movies={movies} />
+      <Home
+        movies={movies}
+        topRatedMovies={topRatedMovies}
+      />
     </div>
   )
 }
