@@ -20,7 +20,7 @@ const parsePeople = (items, type = "actor") => {
   return []
 }
 
-const MovieDetail = ({ movies = [], topRatedMovies = [] }) => {
+const MovieDetail = ({ movies = [], topRatedMovies = [], reviews = [], reviewsError = null }) => {
   const { id } = useParams()
 
   const movie = useMemo(() => {
@@ -128,6 +128,43 @@ const MovieDetail = ({ movies = [], topRatedMovies = [] }) => {
               ) : (
                 <p className="text-gray-600 dark:text-gray-300">
                   Chưa có thông tin đạo diễn.
+                </p>
+              )}
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold mb-2">Đánh giá</h2>
+              {reviewsError && (
+                <p className="text-red-500 text-sm mb-2">Lỗi tải review: {reviewsError}</p>
+              )}
+              {reviews?.length ? (
+                <div className="space-y-3">
+                  {reviews.map((review) => (
+                    <div
+                      key={review.id ?? `${review.username}-${review.date}`}
+                      className="rounded-lg border border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-900"
+                    >
+                      <div className="flex items-center justify-between gap-4 mb-2">
+                        <div className="font-semibold text-gray-900 dark:text-gray-100">
+                          {review.title}
+                        </div>
+                        <div className="text-sm text-yellow-500 font-semibold">
+                          ★ {review.rate ?? "N/A"}
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                        {review.username} • {new Date(review.date).toLocaleDateString()}
+                        {review.warning_spoilers ? " • Spoiler" : ""}
+                      </p>
+                      <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
+                        {review.content}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-600 dark:text-gray-300">
+                  Chưa có đánh giá.
                 </p>
               )}
             </section>

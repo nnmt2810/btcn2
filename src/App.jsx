@@ -8,6 +8,7 @@ import { getMovies } from './api/movie.api'
 import { getMoviesTopRated } from './api/movie.top-rated.api'
 import { getMovieDetail } from './api/movie.detail.api'
 import { Routes, Route, useLocation } from "react-router-dom"
+import { getMovieReview } from './api/movie.review.api'
 
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
   const [detailMovie, setDetailMovie] = useState(null)
   const [detailLoading, setDetailLoading] = useState(false)
   const [detailError, setDetailError] = useState(null)
+  const [reviews, setReviews] = useState([])
+  const [reviewsError, setReviewsError] = useState(null)
   const location = useLocation()
 
   useEffect(() => {
@@ -57,6 +60,8 @@ function App() {
     if (!currentId) {
       setDetailMovie(null)
       setDetailError(null)
+      setReviews([])
+      setReviewsError(null)
       return
     }
 
@@ -65,13 +70,20 @@ function App() {
       try {
         setDetailLoading(true)
         setDetailError(null)
+        setReviewsError(null)
         const data = await getMovieDetail(currentId)
+        const reviewRes = await getMovieReview(currentId)
         if (isMounted) {
           const detailData = data?.data ?? data
+          const reviewData = reviewRes?.data ?? reviewRes?.data?.data ?? reviewRes?.data ?? []
           setDetailMovie(detailData)
+          setReviews(Array.isArray(reviewData?.data) ? reviewData.data : reviewData)
         }
       } catch (err) {
-        if (isMounted) setDetailError(err.message)
+        if (isMounted) {
+          if (!detailMovie) setDetailError(err.message)
+          else setReviewsError(err.message)
+        }
       } finally {
         if (isMounted) setDetailLoading(false)
       }
@@ -108,6 +120,8 @@ function App() {
             <MovieDetail
               movies={detailMovie ? [detailMovie] : []}
               topRatedMovies={[]}
+              reviews={reviews}
+              reviewsError={reviewsError}
             />
           }
         />
