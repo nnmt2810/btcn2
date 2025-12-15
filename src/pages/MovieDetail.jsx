@@ -1,10 +1,21 @@
 import { useMemo } from "react"
 import { Link, useParams } from "react-router-dom"
 
-const parseActors = (actors) => {
-  if (Array.isArray(actors)) return actors
-  if (typeof actors === "string") {
-    return actors.split(",").map((item) => item.trim()).filter(Boolean)
+const parsePeople = (items, type = "actor") => {
+  if (Array.isArray(items)) {
+    return items.map((item) => {
+      if (typeof item === "string") return item
+      const name = item?.name || item?.title || "Unknown"
+      if (type === "actor") {
+        const detail = item?.character || item?.role
+        return detail ? `${name} — ${detail}` : name
+      }
+      const role = item?.role
+      return role ? `${name} — ${role}` : name
+    })
+  }
+  if (typeof items === "string") {
+    return items.split(",").map((text) => text.trim()).filter(Boolean)
   }
   return []
 }
@@ -33,15 +44,9 @@ const MovieDetail = ({ movies = [], topRatedMovies = [] }) => {
     )
   }
 
-  const description = movie.short_description || "Không có mô tả."
-  const actors =
-    movie.actors ||
-    movie.cast ||
-    movie.casts ||
-    movie.stars ||
-    movie.actors_list ||
-    []
-  const actorList = parseActors(actors)
+  const description = movie.plot_full
+  const actorList = parsePeople(movie.actors, "actor")
+  const directorList = parsePeople(movie.directors, "director")
 
   return (
     <main className="min-h-screen bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
@@ -74,9 +79,7 @@ const MovieDetail = ({ movies = [], topRatedMovies = [] }) => {
 
             <section>
               <h2 className="text-lg font-semibold mb-2">Nội dung</h2>
-              <p className="leading-relaxed text-gray-700 dark:text-gray-200">
                 {description}
-              </p>
             </section>
 
             <section>
@@ -102,14 +105,29 @@ const MovieDetail = ({ movies = [], topRatedMovies = [] }) => {
             <section>
               <h2 className="text-lg font-semibold mb-2">Diễn viên</h2>
               {actorList.length ? (
-                <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-200">
-                  {actorList.map((actor) => (
-                    <li key={actor}>{actor}</li>
+                <ul className="list-disc list-inside space-y-1 text-gray-800 dark:text-gray-100">
+                  {actorList.map((actor, idx) => (
+                    <li key={`${actor}-${idx}`}>{actor}</li>
                   ))}
                 </ul>
               ) : (
                 <p className="text-gray-600 dark:text-gray-300">
                   Chưa có thông tin diễn viên.
+                </p>
+              )}
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold mb-2">Đạo diễn</h2>
+              {directorList.length ? (
+                <ul className="list-disc list-inside space-y-1 text-gray-800 dark:text-gray-100">
+                  {directorList.map((director, idx) => (
+                    <li key={`${director}-${idx}`}>{director}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-600 dark:text-gray-300">
+                  Chưa có thông tin đạo diễn.
                 </p>
               )}
             </section>

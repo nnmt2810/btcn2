@@ -6,7 +6,8 @@ import Home from './pages/Home'
 import MovieDetail from './pages/MovieDetail'
 import { getMovies } from './api/movie.api'
 import { getMoviesTopRated } from './api/movie.top-rated.api'
-import { Routes, Route } from "react-router-dom"
+import { getMovieDetail } from './api/movie.detail.api'
+import { Routes, Route, useLocation } from "react-router-dom"
 
 
 function App() {
@@ -19,6 +20,10 @@ function App() {
   const [topRatedMovies, setTopRatedMovies] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [detailMovie, setDetailMovie] = useState(null)
+  const [detailLoading, setDetailLoading] = useState(false)
+  const [detailError, setDetailError] = useState(null)
+  const location = useLocation()
 
   useEffect(() => {
     const root = document.documentElement
@@ -46,8 +51,43 @@ function App() {
   fetchData()
 }, [])
 
+  useEffect(() => {
+    const match = location.pathname.match(/^\/movies\/([^/]+)/)
+    const currentId = match?.[1]
+    if (!currentId) {
+      setDetailMovie(null)
+      setDetailError(null)
+      return
+    }
+
+    let isMounted = true
+    const fetchDetail = async () => {
+      try {
+        setDetailLoading(true)
+        setDetailError(null)
+        const data = await getMovieDetail(currentId)
+        if (isMounted) {
+          const detailData = data?.data ?? data
+          setDetailMovie(detailData)
+        }
+      } catch (err) {
+        if (isMounted) setDetailError(err.message)
+      } finally {
+        if (isMounted) setDetailLoading(false)
+      }
+    }
+
+    fetchDetail()
+
+    return () => {
+      isMounted = false
+    }
+  }, [location.pathname])
+
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error: {error}</p>
+  if (detailLoading) return <p>Loading detail...</p>
+  if (detailError) return <p>Error: {detailError}</p>
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-800 transition-colors">
@@ -66,8 +106,8 @@ function App() {
           path='/movies/:id'
           element={
             <MovieDetail
-              movies={movies}
-              topRatedMovies={topRatedMovies}
+              movies={detailMovie ? [detailMovie] : []}
+              topRatedMovies={[]}
             />
           }
         />
