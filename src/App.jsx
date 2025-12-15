@@ -4,11 +4,13 @@ import './App.css'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import MovieDetail from './pages/MovieDetail'
+import Search from './pages/Search'
 import { getMovies } from './api/movie.api'
 import { getMoviesTopRated } from './api/movie.top-rated.api'
 import { getMovieDetail } from './api/movie.detail.api'
-import { Routes, Route, useLocation } from "react-router-dom"
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom"
 import { getMovieReview } from './api/movie.review.api'
+import { searchMovies } from './api/movie.search.api'
 
 
 function App() {
@@ -26,7 +28,10 @@ function App() {
   const [detailError, setDetailError] = useState(null)
   const [reviews, setReviews] = useState([])
   const [reviewsError, setReviewsError] = useState(null)
+  const [searchResults, setSearchResults] = useState([])
+  const [searchError, setSearchError] = useState(null)
   const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const root = document.documentElement
@@ -53,6 +58,20 @@ function App() {
 
   fetchData()
 }, [])
+
+  const handleSearch = async ({ q, title, genre, person }) => {
+    try {
+      setSearchError(null)
+      const res = await searchMovies({ q, title, genre, person })
+      const list = res.data ?? res
+      setSearchResults(Array.isArray(list) ? list : list.data ?? [])
+      navigate("/search")
+    } catch (err) {
+      setSearchError(err.message)
+      setSearchResults([])
+      navigate("/search")
+    }
+  }
 
   useEffect(() => {
     const match = location.pathname.match(/^\/movies\/([^/]+)/)
@@ -107,12 +126,16 @@ function App() {
         darkMode={darkMode}
         setDarkMode={setDarkMode}
       />
-      <Navbar />
+      <Navbar onSearch={handleSearch} />
 
       <Routes>
         <Route
           path='/'
           element={<Home movies={movies} topRatedMovies={topRatedMovies}/>}
+        />
+        <Route
+          path='/search'
+          element={<Search results={searchResults} error={searchError} />}
         />
         <Route
           path='/movies/:id'
