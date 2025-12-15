@@ -4,6 +4,7 @@ import MovieRow from "../components/MovieRow"
 
 const Home = ({ movies, topRatedMovies }) => {
     const [index, setIndex] = useState(0)
+    const [selectedMovie, setSelectedMovie] = useState(null)
 
     const prev = () => {
         setIndex((prev) => (prev - 1))
@@ -27,7 +28,14 @@ const Home = ({ movies, topRatedMovies }) => {
                     </button>
                 )}
 
-                {movie && <MovieCard key={movie.id} movie={movie} big />}
+                {movie && ( 
+                    <MovieCard 
+                        onClick={()=> setSelectedMovie(movie)} 
+                        key={movie.id} 
+                        movie={movie} 
+                        big 
+                    />
+                )}
 
                 {index < 4 && (
                     <button
@@ -43,10 +51,12 @@ const Home = ({ movies, topRatedMovies }) => {
                 <MovieRow
                     title="Most Popular"
                     movies={movies}
+                    onMovieClick={setSelectedMovie}
                 />
                 <MovieRow
                     title="Top Rating"
                     movies={topRatedMovies}
+                    onMovieClick={setSelectedMovie}
                 />
             </section>
         </main>
