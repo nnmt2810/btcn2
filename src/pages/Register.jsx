@@ -4,7 +4,13 @@ import { register } from "../api/auth.register.api"
 
 const Register = () => {
   const navigate = useNavigate()
-  const [form, setForm] = useState({ name: "", email: "", password: "", confirm: "" })
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirm: "",
+    phone: "",
+  })
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -16,7 +22,7 @@ const Register = () => {
   const onSubmit = async (e) => {
     e.preventDefault()
     setError(null)
-    if (!form.name || !form.email || !form.password || !form.confirm) {
+    if (!form.username || !form.email || !form.password || !form.confirm || !form.phone) {
       setError("Vui lòng điền đầy đủ thông tin.")
       return
     }
@@ -27,7 +33,12 @@ const Register = () => {
 
     try {
       setLoading(true)
-      await register({ name: form.name, email: form.email, password: form.password })
+      await register({
+        username: form.username,
+        email: form.email,
+        password: form.password,
+        phone: form.phone,
+      })
       navigate("/")
     } catch (err) {
       setError(err.message)
@@ -44,14 +55,14 @@ const Register = () => {
 
         <form className="space-y-4" onSubmit={onSubmit}>
           <div>
-            <label className="block text-sm mb-1">Họ tên</label>
+            <label className="block text-sm mb-1">Username</label>
             <input
               type="text"
-              name="name"
-              value={form.name}
+              name="username"
+              value={form.username}
               onChange={onChange}
               className="w-full rounded border border-gray-300 dark:border-gray-700 px-3 py-2 bg-transparent outline-none focus:border-gray-400 focus:ring-1 focus:ring-red-300"
-              placeholder="Tên của bạn"
+              placeholder="username"
             />
           </div>
 
@@ -90,6 +101,19 @@ const Register = () => {
               placeholder="••••••••"
             />
           </div>
+
+          <div>
+            <label className="block text-sm mb-1">Số điện thoại</label>
+            <input
+              type="tel"
+              name="phone"
+              value={form.phone}
+              onChange={onChange}
+              className="w-full rounded border border-gray-300 dark:border-gray-700 px-3 py-2 bg-transparent outline-none focus:border-gray-400 focus:ring-1 focus:ring-red-300"
+              placeholder="0123xxxxxx"
+            />
+          </div>
+
 
           <button
             type="submit"

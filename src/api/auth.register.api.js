@@ -1,10 +1,13 @@
-export const register = async ({ name, email, password }) => {
-  const res = await fetch("/api/auth/register", {
+export const register = async ({ username, email, password, phone }) => {
+  const token = import.meta.env.VITE_APP_TOKEN
+
+  const res = await fetch("/api/users/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "x-app-token": token,
     },
-    body: JSON.stringify({ name, email, password }),
+    body: JSON.stringify({ username, email, password, phone }),
   })
 
   const text = await res.text()
