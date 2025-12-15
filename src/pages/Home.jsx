@@ -1,7 +1,8 @@
 import { useState } from "react"
 import MovieCard from "../components/MovieCard"
+import MovieRow from "../components/MovieRow"
 
-const Home = ({ movies }) => {
+const Home = ({ movies, topRatedMovies }) => {
     const [index, setIndex] = useState(0)
 
     const prev = () => {
@@ -36,6 +37,17 @@ const Home = ({ movies }) => {
                         ▶
                     </button>
                 )}
+            </section>
+
+            <section className="space-y-10 px-6 pb-10">
+                <MovieRow
+                    title="Most Popular"
+                    movies={movies}
+                />
+                <MovieRow
+                    title="Top Rating"
+                    movies={topRatedMovies}
+                />
             </section>
         </main>
     )
