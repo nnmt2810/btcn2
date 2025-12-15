@@ -1,6 +1,6 @@
 const MovieCard = ({ movie }) => {
   return (
-    <div className="w-60 flex-shrink-0 mx-2 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+    <div className="w-60 shrink-0 mx-2 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg">
       <img
         src={movie.image} 
         alt={movie.title} 
