@@ -1,6 +1,6 @@
 const Navbar = () => {
     return (
-        <nav className=" bg-blue-100 shadow mt-2 py-2">
+        <nav className=" bg-blue-100 shadow mt-2 mb-2 py-2">
             <div className="max-w-[1200px] h-8 mx-auto flex items-center justify-between gap-4 px-4 py-3">
                 <button
                     type="button"
