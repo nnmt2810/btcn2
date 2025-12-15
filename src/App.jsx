@@ -3,8 +3,11 @@ import Header from './components/Header'
 import './App.css'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
+import MovieDetail from './pages/MovieDetail'
 import { getMovies } from './api/movie.api'
 import { getMoviesTopRated } from './api/movie.top-rated.api'
+import { Routes, Route } from "react-router-dom"
+
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -53,10 +56,22 @@ function App() {
         setDarkMode={setDarkMode}
       />
       <Navbar />
-      <Home
-        movies={movies}
-        topRatedMovies={topRatedMovies}
-      />
+
+      <Routes>
+        <Route
+          path='/'
+          element={<Home movies={movies} topRatedMovies={topRatedMovies}/>}
+        />
+        <Route
+          path='/movies/:id'
+          element={
+            <MovieDetail
+              movies={movies}
+              topRatedMovies={topRatedMovies}
+            />
+          }
+        />
+      </Routes>
     </div>
   )
 }

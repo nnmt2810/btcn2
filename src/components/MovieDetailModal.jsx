@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 const MovieDetailModal = ({ movie, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
@@ -36,6 +38,13 @@ const MovieDetailModal = ({ movie, onClose }) => {
                 </span>
               ))}
             </div>
+
+            <Link
+              to={`/movies/${movie.id}`}
+              className="inline-block mt-4 text-blue-600 dark:text-blue-300 font-semibold hover:underline"
+            >
+              Xem chi tiết
+            </Link>
           </div>
         </div>
 
