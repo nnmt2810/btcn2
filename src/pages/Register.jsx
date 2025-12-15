@@ -126,8 +126,8 @@ const Register = () => {
 
         <p className="text-sm text-center text-gray-600 dark:text-gray-300">
           Đã có tài khoản?{" "}
-          <Link to="/" className="text-blue-600 dark:text-blue-300 hover:underline">
-            Về trang chủ
+          <Link to="/login" className="text-blue-600 dark:text-blue-300 hover:underline">
+            Đăng nhập
           </Link>
         </p>
       </div>

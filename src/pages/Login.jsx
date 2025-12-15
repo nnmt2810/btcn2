@@ -1,8 +1,10 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
+import { AuthContext } from "../auth/AuthContext"
 import { useNavigate, Link } from "react-router-dom"
 import { login } from "../api/auth.login.api"
 
 const Login = () => {
+  const { loginSuccess } = useContext(AuthContext)
   const navigate = useNavigate()
   const [form, setForm] = useState({ username: "", password: "" })
   const [error, setError] = useState(null)
@@ -23,7 +25,10 @@ const Login = () => {
 
     try {
       setLoading(true)
+      const data = await login({ username: form.username, password: form.password })
       await login({ username: form.username, password: form.password })
+      loginSuccess(data)
+
       navigate("/")
     } catch (err) {
       setError(err.message)

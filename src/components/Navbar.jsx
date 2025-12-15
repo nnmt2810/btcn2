@@ -1,8 +1,10 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { Link } from "react-router-dom"
+import { AuthContext } from "../auth/AuthContext"
 
 const Navbar = ({ onSearch }) => {
     const [term, setTerm] = useState("")
+    const { user, logout } = useContext(AuthContext)
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -42,20 +44,36 @@ const Navbar = ({ onSearch }) => {
                     </button>
                 </form>
 
-                <div className="flex items-center gap-2">
-                    <Link
+                {user ? (
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 font-semibold">
+                        <span className="text-lg">👤</span>
+                        <span>{user.username}</span>
+                        </div>
+
+                        <button
+                        onClick={logout}
+                        className="rounded bg-red-500 text-white px-3 py-2 text-sm font-semibold hover:bg-red-600 transition"
+                        >
+                        Logout
+                        </button>
+                    </div>
+                ) : (
+                    <div className="flex items-center gap-2">
+                        <Link
                         to="/login"
                         className="rounded bg-gray-800 text-white px-3 py-2 hover:bg-black transition text-sm font-semibold"
-                    >
+                        >
                         Login
-                    </Link>
-                    <Link
+                        </Link>
+                        <Link
                         to="/register"
                         className="rounded bg-green-500 text-white px-4 py-2 hover:bg-green-600 transition text-sm font-semibold"
-                    >
+                        >
                         Register
-                    </Link>
-                </div>
+                        </Link>
+                    </div>
+                )}
             </div>
         </nav>
   )
