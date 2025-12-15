@@ -1,6 +1,7 @@
 import { useState } from "react"
 import MovieCard from "../components/MovieCard"
 import MovieRow from "../components/MovieRow"
+import MovieDetailModal from "../components/MovieDetailModal"
 
 const Home = ({ movies, topRatedMovies }) => {
     const [index, setIndex] = useState(0)
@@ -59,6 +60,13 @@ const Home = ({ movies, topRatedMovies }) => {
                     onMovieClick={setSelectedMovie}
                 />
             </section>
+
+            {selectedMovie && (
+                <MovieDetailModal
+                    movie={selectedMovie}
+                    onClose={() => setSelectedMovie(null)}
+                />
+            )}
         </main>
     )
 }
