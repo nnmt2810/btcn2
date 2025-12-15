@@ -49,6 +49,12 @@ const Navbar = ({ onSearch }) => {
                     >
                         Login
                     </Link>
+                    <Link
+                        to="/register"
+                        className="rounded bg-green-500 text-white px-4 py-2 hover:bg-green-600 transition text-sm font-semibold"
+                    >
+                        Register
+                    </Link>
                 </div>
             </div>
         </nav>

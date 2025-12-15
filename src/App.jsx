@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import MovieDetail from './pages/MovieDetail'
 import Search from './pages/Search'
 import Register from './pages/Register'
+import Login from './pages/Login'
 import { getMovies } from './api/movie.api'
 import { getMoviesTopRated } from './api/movie.top-rated.api'
 import { getMovieDetail } from './api/movie.detail.api'
@@ -141,6 +142,10 @@ function App() {
         <Route
           path='/register'
           element={<Register />}
+        />
+        <Route
+          path='/login'
+          element={<Login />}
         />
         <Route
           path='/movies/:id'
