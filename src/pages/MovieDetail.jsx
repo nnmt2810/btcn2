@@ -44,7 +44,6 @@ const MovieDetail = ({ movies = [], topRatedMovies = [] }) => {
     )
   }
 
-  const description = movie.plot_full
   const actorList = parsePeople(movie.actors, "actor")
   const directorList = parsePeople(movie.directors, "director")
 
@@ -79,7 +78,8 @@ const MovieDetail = ({ movies = [], topRatedMovies = [] }) => {
 
             <section>
               <h2 className="text-lg font-semibold mb-2">Nội dung</h2>
-                {description}
+                {/* Đã test để lấy short_description nhưng API không trả về dữ liệu của short_description */}
+                {movie.short_description || movie.plot_full || "Không có nội dung."}
             </section>
 
             <section>

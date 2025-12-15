@@ -1,7 +1,8 @@
 const MovieCard = ({ movie, onClick, big }) => {
+  const baseHover = "transition-transform duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10 dark:hover:shadow-white/10"
   const cardClass = big 
-    ? "w-80 shrink-0 mx-2 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg cursor-pointer"  // Lớn hơn cho big
-    : "w-60 shrink-0 mx-2 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg cursor-pointer";
+    ? `w-80 shrink-0 mx-2 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg cursor-pointer ${baseHover}`  // Lớn hơn cho big
+    : `w-60 shrink-0 mx-2 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg cursor-pointer ${baseHover}`;
   
   const imgClass = big 
     ? "w-full h-[500px] object-cover"
