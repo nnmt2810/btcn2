@@ -14,8 +14,6 @@ import { getMovieDetail } from './api/movie.detail.api'
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom"
 import { getMovieReview } from './api/movie.review.api'
 import { searchMovies } from './api/movie.search.api'
-import { getPersonDetail } from './api/person.detail.api'
-
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -34,9 +32,6 @@ function App() {
   const [reviewsError, setReviewsError] = useState(null)
   const [searchResults, setSearchResults] = useState([])
   const [searchError, setSearchError] = useState(null)
-  const [detailPerson, setDetailPerson] = useState(null)
-  const [detailPersonLoading, setDetailPersonLoading] = useState(false)
-  const [detailPersonError, setDetailPersonError] = useState(null)
   const location = useLocation()
   const navigate = useNavigate()
 
