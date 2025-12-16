@@ -7,12 +7,14 @@ import MovieDetail from './pages/MovieDetail'
 import Search from './pages/Search'
 import Register from './pages/Register'
 import Login from './pages/Login'
+import PersonDetail from './pages/PersonDetail'
 import { getMovies } from './api/movie.api'
 import { getMoviesTopRated } from './api/movie.top-rated.api'
 import { getMovieDetail } from './api/movie.detail.api'
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom"
 import { getMovieReview } from './api/movie.review.api'
 import { searchMovies } from './api/movie.search.api'
+import { getPersonDetail } from './api/person.detail.api'
 
 
 function App() {
@@ -32,6 +34,9 @@ function App() {
   const [reviewsError, setReviewsError] = useState(null)
   const [searchResults, setSearchResults] = useState([])
   const [searchError, setSearchError] = useState(null)
+  const [detailPerson, setDetailPerson] = useState(null)
+  const [detailPersonLoading, setDetailPersonLoading] = useState(false)
+  const [detailPersonError, setDetailPersonError] = useState(null)
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -116,6 +121,7 @@ function App() {
       isMounted = false
     }
   }, [location.pathname])
+  
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error: {error}</p>
@@ -157,6 +163,10 @@ function App() {
               reviewsError={reviewsError}
             />
           }
+        />
+        <Route 
+          path='/persons/:id' 
+          element={<PersonDetail />} 
         />
       </Routes>
     </div>

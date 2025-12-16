@@ -115,7 +115,7 @@ const MovieDetail = ({
                     <li key={actor.id ?? idx}>
                       {actor.id ? (
                         <Link
-                          to={`/person/${actor.id}`}
+                          to={`/persons/${actor.id}`}
                           className="text-blue-600 dark:text-blue-300 hover:underline"
                         >
                           {actor.name}
@@ -146,7 +146,7 @@ const MovieDetail = ({
                     <li key={director.id ?? idx}>
                       {director.id ? (
                         <Link
-                          to={`/person/${director.id}`}
+                          to={`/persons/${director.id}`}
                           className="text-blue-600 dark:text-blue-300 hover:underline"
                         >
                           {director.name}
