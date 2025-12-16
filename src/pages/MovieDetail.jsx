@@ -1,32 +1,34 @@
-import { useMemo } from "react"
-import { Link, useParams } from "react-router-dom"
+import { useMemo } from "react";
+import { Link, useParams } from "react-router-dom";
 
-const parsePeople = (items, type = "actor") => {
-  if (Array.isArray(items)) {
-    return items.map((item) => {
-      if (typeof item === "string") return item
-      const name = item?.name || item?.title || "Unknown"
-      if (type === "actor") {
-        const detail = item?.character || item?.role
-        return detail ? `${name} — ${detail}` : name
-      }
-      const role = item?.role
-      return role ? `${name} — ${role}` : name
-    })
-  }
-  if (typeof items === "string") {
-    return items.split(",").map((text) => text.trim()).filter(Boolean)
-  }
-  return []
-}
+const parsePeople = (items = []) => {
+  if (!Array.isArray(items)) return [];
 
-const MovieDetail = ({ movies = [], topRatedMovies = [], reviews = [], reviewsError = null }) => {
-  const { id } = useParams()
+  return items.map((item) => {
+    if (typeof item === "string") {
+      return { name: item };
+    }
+
+    return {
+      id: item.id,
+      name: item.name || item.title || "Unknown",
+      role: item.role || item.character || null,
+    };
+  });
+};
+
+const MovieDetail = ({
+  movies = [],
+  topRatedMovies = [],
+  reviews = [],
+  reviewsError = null,
+}) => {
+  const { id } = useParams();
 
   const movie = useMemo(() => {
-    const allMovies = [...movies, ...topRatedMovies]
-    return allMovies.find((item) => String(item.id) === id)
-  }, [id, movies, topRatedMovies])
+    const allMovies = [...movies, ...topRatedMovies];
+    return allMovies.find((item) => String(item.id) === id);
+  }, [id, movies, topRatedMovies]);
 
   if (!movie) {
     return (
@@ -41,11 +43,11 @@ const MovieDetail = ({ movies = [], topRatedMovies = [], reviews = [], reviewsEr
           </Link>
         </div>
       </main>
-    )
+    );
   }
 
-  const actorList = parsePeople(movie.actors, "actor")
-  const directorList = parsePeople(movie.directors, "director")
+  const actorList = parsePeople(movie.actors, "actor");
+  const directorList = parsePeople(movie.directors, "director");
 
   return (
     <main className="min-h-screen bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
@@ -78,8 +80,10 @@ const MovieDetail = ({ movies = [], topRatedMovies = [], reviews = [], reviewsEr
 
             <section>
               <h2 className="text-lg font-semibold mb-2">Nội dung</h2>
-                {/* Đã test để lấy short_description nhưng API không trả về dữ liệu của short_description */}
-                {movie.short_description || movie.plot_full || "Không có nội dung."}
+              {/* Đã test để lấy short_description nhưng API không trả về dữ liệu của short_description */}
+              {movie.short_description ||
+                movie.plot_full ||
+                "Không có nội dung."}
             </section>
 
             <section>
@@ -104,10 +108,26 @@ const MovieDetail = ({ movies = [], topRatedMovies = [], reviews = [], reviewsEr
 
             <section>
               <h2 className="text-lg font-semibold mb-2">Diễn viên</h2>
+
               {actorList.length ? (
-                <ul className="list-disc list-inside space-y-1 text-gray-800 dark:text-gray-100">
+                <ul className="list-disc list-inside space-y-1">
                   {actorList.map((actor, idx) => (
-                    <li key={`${actor}-${idx}`}>{actor}</li>
+                    <li key={actor.id ?? idx}>
+                      {actor.id ? (
+                        <Link
+                          to={`/person/${actor.id}`}
+                          className="text-blue-600 dark:text-blue-300 hover:underline"
+                        >
+                          {actor.name}
+                        </Link>
+                      ) : (
+                        <span>{actor.name}</span>
+                      )}
+
+                      {actor.role && (
+                        <span className="text-gray-500"> — {actor.role}</span>
+                      )}
+                    </li>
                   ))}
                 </ul>
               ) : (
@@ -119,10 +139,29 @@ const MovieDetail = ({ movies = [], topRatedMovies = [], reviews = [], reviewsEr
 
             <section>
               <h2 className="text-lg font-semibold mb-2">Đạo diễn</h2>
+
               {directorList.length ? (
-                <ul className="list-disc list-inside space-y-1 text-gray-800 dark:text-gray-100">
+                <ul className="list-disc list-inside space-y-1">
                   {directorList.map((director, idx) => (
-                    <li key={`${director}-${idx}`}>{director}</li>
+                    <li key={director.id ?? idx}>
+                      {director.id ? (
+                        <Link
+                          to={`/person/${director.id}`}
+                          className="text-blue-600 dark:text-blue-300 hover:underline"
+                        >
+                          {director.name}
+                        </Link>
+                      ) : (
+                        <span>{director.name}</span>
+                      )}
+
+                      {director.role && (
+                        <span className="text-gray-500">
+                          {" "}
+                          — {director.role}
+                        </span>
+                      )}
+                    </li>
                   ))}
                 </ul>
               ) : (
@@ -135,7 +174,9 @@ const MovieDetail = ({ movies = [], topRatedMovies = [], reviews = [], reviewsEr
             <section>
               <h2 className="text-lg font-semibold mb-2">Đánh giá</h2>
               {reviewsError && (
-                <p className="text-red-500 text-sm mb-2">Lỗi tải review: {reviewsError}</p>
+                <p className="text-red-500 text-sm mb-2">
+                  Lỗi tải review: {reviewsError}
+                </p>
               )}
               {reviews?.length ? (
                 <div className="space-y-3">
@@ -153,7 +194,8 @@ const MovieDetail = ({ movies = [], topRatedMovies = [], reviews = [], reviewsEr
                         </div>
                       </div>
                       <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        {review.username} • {new Date(review.date).toLocaleDateString()}
+                        {review.username} •{" "}
+                        {new Date(review.date).toLocaleDateString()}
                         {review.warning_spoilers ? " • Spoiler" : ""}
                       </p>
                       <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
@@ -172,8 +214,7 @@ const MovieDetail = ({ movies = [], topRatedMovies = [], reviews = [], reviewsEr
         </div>
       </div>
     </main>
-  )
-}
+  );
+};
 
-export default MovieDetail
-
+export default MovieDetail;
