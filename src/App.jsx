@@ -14,6 +14,7 @@ import { getMovieDetail } from './api/movie.detail.api'
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom"
 import { getMovieReview } from './api/movie.review.api'
 import { searchMovies } from './api/movie.search.api'
+import Footer from './components/Footer'
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -164,6 +165,7 @@ function App() {
           element={<PersonDetail />} 
         />
       </Routes>
+      <Footer />
     </div>
   )
 }
